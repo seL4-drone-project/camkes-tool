@@ -40,6 +40,7 @@ ID: '[a-zA-Z_]\w*'
             DATAPORT_TYPE: 'Dataport';
             DATAPORTS_TYPE: 'Dataports';
             EMITS: 'emits';
+            ENDPOINT: 'endpoint';
             EVENT_TYPE: 'Event';
             EVENTS_TYPE: 'Events';
             EXPORT: 'export';
@@ -97,7 +98,7 @@ attribute_decl: attribute_parameter ('=' item)? ;
 
 component_decl: COMPONENT id? component_defn;
 component_defn: '\{' (attribute | consumes | control | dataport | emits |
-                      hardware | include | mutex | provides | semaphore | binary_semaphore |
+                      hardware | include | mutex | provides | semaphore | binary_semaphore | endpoint |
                       uses)*
                     ((composition_sing configuration_sing?) | configuration_sing composition_sing)? '\}';
 component_ref: reference | component_defn;
@@ -116,6 +117,7 @@ mutex: HAS MUTEX id ';';
 provides: PROVIDES reference id ';';
 semaphore: HAS SEMAPHORE id ';';
 binary_semaphore: HAS BINARY_SEMAPHORE id ';';
+endpoint: HAS ENDPOINT id ';';
 uses: maybe? USES reference id ';';
 maybe: MAYBE;
 
