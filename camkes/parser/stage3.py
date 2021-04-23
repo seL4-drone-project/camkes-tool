@@ -27,7 +27,7 @@ from camkes.internal.seven import cmp, filter, map, zip
 
 from camkes.ast import Assembly, Attribute, AttributeReference, Component, \
     Composition, Configuration, Connection, ConnectionEnd, Connector, \
-    Consumes, Dataport, DictLookup, Emits, Export, Group, Include, Instance, Interface, \
+    Consumes, Dataport, DictLookup, Emits, Endpoint, Export, Group, Include, Instance, Interface, \
     LiftedAST, Method, Mutex, normalise_type, Parameter, Procedure, Provides, \
     Reference, Semaphore, BinarySemaphore, QueryObject, Setting, SourceLocation, Uses, Struct
 from .base import Parser
@@ -240,6 +240,7 @@ def _lift_component_decl(location, *args):
                      attributes=component_defn.attributes, mutexes=component_defn.mutexes,
                      semaphores=component_defn.semaphores,
                      binary_semaphores=component_defn.binary_semaphores,
+                     endpoints=component_defn.endpoints,
                      composition=component_defn.composition,
                      configuration=component_defn.configuration, location=location)
 
@@ -263,6 +264,7 @@ def _lift_component_defn(location, *args):
                      mutexes=[x for x in args if isinstance(x, Mutex)],
                      semaphores=[x for x in args if isinstance(x, Semaphore)],
                      binary_semaphores=[x for x in args if isinstance(x, BinarySemaphore)],
+                     endpoints=[x for x in args if isinstance(x, Endpoint)],
                      composition=composition, configuration=configuration,
                      location=location)
 
@@ -688,6 +690,10 @@ def _lift_binary_semaphore(location, id):
     return BinarySemaphore(id, location)
 
 
+def _lift_endpoint(location, id):
+    return Endpoint(id, location)
+
+
 def _lift_setting(location, id, id2, item):
     item = strip_quotes(item)
     return Setting(id, id2, item, location)
@@ -838,6 +844,7 @@ LIFT = {
     'reference': _lift_reference,
     'semaphore': _lift_semaphore,
     'binary_semaphore': _lift_binary_semaphore,
+    'endpoint': _lift_endpoint,
     'setting': _lift_setting,
     'signed_char': _lift_signed_char,
     'signed_int': _lift_signed_int,
