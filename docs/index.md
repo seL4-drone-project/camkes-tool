@@ -1,16 +1,8 @@
-# CAmkES Manual
-
 <!--
-  Copyright 2017, Data61
-  Commonwealth Scientific and Industrial Research Organisation (CSIRO)
-  ABN 41 687 119 230.
+     Copyright 2017, Data61, CSIRO (ABN 41 687 119 230)
 
-  This software may be distributed and modified according to the terms of
-  the BSD 2-Clause license. Note that NO WARRANTY is provided.
-  See "LICENSE_BSD2.txt" for details.
-
-     @TAG(DATA61_BSD)
-  -->
+     SPDX-License-Identifier: CC-BY-SA-4.0
+-->
 
 This document describes the structure and functionality of CAmkES, a platform
 for building componentised systems for embedded platforms. The documentation is
@@ -1342,6 +1334,14 @@ The following functions are available at runtime:
   fence. In multiprocessor environments, memory barrier instructions will be
   emitted if necessary, depending on the affinities of component instances
   connected by the dataport.
+
+**`size_t`&nbsp;_`dataport`_`_get_size(void)`**
+
+> Returns the size for the specific dataport this function gets called for. In
+  addition to this function, every component that has a dataport will be
+  provided with a macro _`dataport`_`_size` that is defined to the size of the
+  invdividual dataport. This macro allows declaring fixed size arrays, as the
+  `C` language requires a constant-expression for this.
 
 **`void *camkes_dma_alloc(size_t size, int align)`** (`#include <camkes/dma.h>`)
 **`void camkes_dma_free(void *ptr, size_t size)`** (`#include <camkes/dma.h>`)
