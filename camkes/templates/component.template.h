@@ -231,6 +231,11 @@ const char *get_instance_name(void);
     int /*? b.name ?*/_post(void) WARN_UNUSED_RESULT;
 /*- endfor -*/
 
+/*- for e in me.type.endpoints -*/
+    /*- set ep = alloc(e.name, seL4_EndpointObject, read=True, write=True) -*/
+    static const seL4_CPtr /*? e.name ?*/_ep = /*? ep ?*/;
+/*- endfor -*/
+
 /* Entry point expected to be provided by the user. */
 int run(void);
 
