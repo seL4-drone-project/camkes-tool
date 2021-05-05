@@ -605,17 +605,19 @@ class Struct(ASTObject):
               all(isinstance_fallback(x, "BinarySemaphore") for x in b))
 @ast_property("endpoints", lambda b: isinstance(b, (list, tuple)) and
               all(isinstance_fallback(x, "Endpoint") for x in b))
+@ast_property("notifications", lambda b: isinstance(b, (list, tuple)) and
+              all(isinstance_fallback(x, "Notification") for x in b))
 @ast_property("composition", Composition)
 @ast_property("configuration", Configuration)
 class Component(MapLike):
     child_fields = ('attributes', 'includes', 'provides', 'uses', 'emits',
                     'consumes', 'dataports', 'mutexes', 'semaphores', 'binary_semaphores', 'endpoints',
-                    'composition', 'configuration')
+                    'notifications', 'composition', 'configuration')
 
     def __init__(self, name=None, includes=None, control=False, hardware=False,
                  provides=None, uses=None, emits=None, consumes=None, dataports=None,
                  attributes=None, mutexes=None, semaphores=None, binary_semaphores=None, endpoints=None,
-                 composition=None, configuration=None, location=None):
+                 notifications=None, composition=None, configuration=None, location=None):
         super(Component, self).__init__(location)
         self.name = name
         self.includes = list(includes or [])
@@ -631,6 +633,7 @@ class Component(MapLike):
         self.semaphores = list(semaphores or [])
         self.binary_semaphores = list(binary_semaphores or [])
         self.endpoints = list(endpoints or [])
+        self.notifications = list(notifications or [])
         if composition is not None:
             self.composition = composition
         else:
@@ -653,6 +656,7 @@ class Component(MapLike):
         [self.adopt(s) for s in self.semaphores]
         [self.adopt(b) for b in self.binary_semaphores]
         [self.adopt(e) for e in self.endpoints]
+        [self.adopt(n) for n in self.notifications]
         if self.composition is not None:
             self.adopt(self.composition)
         if self.configuration is not None:
@@ -676,6 +680,10 @@ class Component(MapLike):
                 raise ASTError('component %s is illegally defined as a '
                                'hardware device that also has endpoints' % self.name,
                                self)
+            if len(self.notifications) > 0:
+                raise ASTError('component %s is illegally defined as a '
+                               'hardware device that also has notifications' % self.name,
+                               self)
         self.includes = tuple(self.includes)
         self.provides = tuple(self.provides)
         self.uses = tuple(self.uses)
@@ -686,6 +694,7 @@ class Component(MapLike):
         self.mutexes = tuple(self.mutexes)
         self.semaphores = tuple(self.semaphores)
         self.endpoints = tuple(self.endpoints)
+        self.notifications = tuple(self.notifications)
         super(Component, self).freeze()
 
     def interface_is_exported(self, interface):
@@ -784,6 +793,12 @@ class BinarySemaphore(ASTObject):
 class Endpoint(ASTObject):
     def __init__(self, name, location=None):
         super(Endpoint, self).__init__(location)
+        self.name = name
+
+@ast_property("name", six.string_types)
+class Notification(ASTObject):
+    def __init__(self, name, location=None):
+        super(Notification, self).__init__(location)
         self.name = name
 
 
@@ -987,7 +1002,7 @@ class ConnectionEnd(ASTObject):
         return len(self.instance.type.provides + self.instance.type.uses
                    + self.instance.type.consumes
                    + self.instance.type.mutexes + self.instance.type.semaphores
-                   + self.instance.type.endpoints) > 1
+                   + self.instance.type.endpoints + self.instance.type.notifications) > 1
 
     def label(self):
         return self.parent.label()

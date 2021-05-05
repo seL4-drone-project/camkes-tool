@@ -22,7 +22,7 @@ from camkes.internal.seven import cmp, filter, map, zip
 from camkes.ast import Assembly, Attribute, AttributeReference, Component, \
     Composition, Configuration, Connection, ConnectionEnd, Connector, \
     Consumes, Dataport, DictLookup, Emits, Endpoint, Export, Group, Include, Instance, Interface, \
-    LiftedAST, Method, Mutex, normalise_type, Parameter, Procedure, Provides, \
+    LiftedAST, Method, Mutex, Notification, normalise_type, Parameter, Procedure, Provides, \
     Reference, Semaphore, BinarySemaphore, QueryObject, Setting, SourceLocation, Uses, Struct
 from .base import Parser
 from .exception import ParseError
@@ -235,6 +235,7 @@ def _lift_component_decl(location, *args):
                      semaphores=component_defn.semaphores,
                      binary_semaphores=component_defn.binary_semaphores,
                      endpoints=component_defn.endpoints,
+                     notifications=component_defn.notifications,
                      composition=component_defn.composition,
                      configuration=component_defn.configuration, location=location)
 
@@ -259,6 +260,7 @@ def _lift_component_defn(location, *args):
                      semaphores=[x for x in args if isinstance(x, Semaphore)],
                      binary_semaphores=[x for x in args if isinstance(x, BinarySemaphore)],
                      endpoints=[x for x in args if isinstance(x, Endpoint)],
+                     notifications=[x for x in args if isinstance(x, Notification)],
                      composition=composition, configuration=configuration,
                      location=location)
 
@@ -688,6 +690,10 @@ def _lift_endpoint(location, id):
     return Endpoint(id, location)
 
 
+def _lift_notification(location, id):
+    return Notification(id, location)
+
+
 def _lift_setting(location, id, id2, item):
     item = strip_quotes(item)
     return Setting(id, id2, item, location)
@@ -839,6 +845,7 @@ LIFT = {
     'semaphore': _lift_semaphore,
     'binary_semaphore': _lift_binary_semaphore,
     'endpoint': _lift_endpoint,
+    'notification': _lift_notification,
     'setting': _lift_setting,
     'signed_char': _lift_signed_char,
     'signed_int': _lift_signed_int,
