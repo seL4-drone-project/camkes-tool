@@ -53,6 +53,7 @@ ID: '[a-zA-Z_]\w*'
             INT64_T: 'int64_t';
             MAYBE: 'maybe';
             MUTEX: 'mutex';
+            NOTIFICATION: 'notification';
             OUT: 'out';
             PROCEDURE: 'procedure';
             PROCEDURE_TYPE: 'Procedure';
@@ -92,7 +93,7 @@ attribute_decl: attribute_parameter ('=' item)? ;
 
 component_decl: COMPONENT id? component_defn;
 component_defn: '\{' (attribute | consumes | control | dataport | emits |
-                      hardware | include | mutex | provides | semaphore | binary_semaphore | endpoint |
+                      hardware | include | mutex | provides | semaphore | binary_semaphore | endpoint | notification |
                       uses)*
                     ((composition_sing configuration_sing?) | configuration_sing composition_sing)? '\}';
 component_ref: reference | component_defn;
@@ -112,6 +113,7 @@ provides: PROVIDES reference id ';';
 semaphore: HAS SEMAPHORE id ';';
 binary_semaphore: HAS BINARY_SEMAPHORE id ';';
 endpoint: HAS ENDPOINT id ';';
+notification: HAS NOTIFICATION id ';';
 uses: maybe? USES reference id ';';
 maybe: MAYBE;
 
