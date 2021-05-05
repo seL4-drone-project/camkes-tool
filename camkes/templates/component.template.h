@@ -235,6 +235,11 @@ const char *get_instance_name(void);
     static const seL4_CPtr /*? e.name ?*/_ep = /*? ep ?*/;
 /*- endfor -*/
 
+/*- for n in me.type.notifications -*/
+    /*- set nt = alloc(n.name, seL4_NotificationObject, read=True, write=True) -*/
+    static const seL4_CPtr /*? n.name ?*/_notification = /*? nt ?*/;
+/*- endfor -*/
+
 /* Entry point expected to be provided by the user. */
 int run(void);
 
