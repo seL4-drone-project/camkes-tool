@@ -232,12 +232,12 @@ const char *get_instance_name(void);
 
 /*- for e in me.type.endpoints -*/
     /*- set ep = alloc(e.name, seL4_EndpointObject, read=True, write=True) -*/
-    static const seL4_CPtr /*? e.name ?*/_ep = /*? ep ?*/;
+    static const seL4_CPtr /*? e.name ?*/ = /*? ep ?*/;
 /*- endfor -*/
 
 /*- for n in me.type.notifications -*/
     /*- set nt = alloc(n.name, seL4_NotificationObject, read=True, write=True) -*/
-    static const seL4_CPtr /*? n.name ?*/_notification = /*? nt ?*/;
+    static const seL4_CPtr /*? n.name ?*/ = /*? nt ?*/;
 /*- endfor -*/
 
 /* Entry point expected to be provided by the user. */
