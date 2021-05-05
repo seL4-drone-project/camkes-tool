@@ -232,7 +232,9 @@ const char *get_instance_name(void);
 
 /*- for e in me.type.endpoints -*/
     /*- set ep = alloc(e.name, seL4_EndpointObject, read=True, write=True) -*/
+    /*- set ep_reply = alloc(e.name + '_reply', seL4_RTReplyObject) -*/
     static const seL4_CPtr /*? e.name ?*/ = /*? ep ?*/;
+    static const seL4_CPtr /*? e.name ?*/_reply = /*? ep_reply ?*/;
 /*- endfor -*/
 
 /*- for n in me.type.notifications -*/
